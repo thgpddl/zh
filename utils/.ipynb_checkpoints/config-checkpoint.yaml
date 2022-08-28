@@ -1,0 +1,30 @@
+arch: ResNet18_Asff234
+epochs: 300
+
+batch_size: 128
+num_workers: 2
+data_path: dataset/fer2013/fer2013.csv
+
+lr: 0.1
+momentum: 0.9
+weight_decay: 0.0001
+
+opti: SGD
+scheduler: reduce
+
+label_smooth: True
+label_smooth_value: 0.1
+
+mixup: True
+mixup_alpha: 1.0
+
+Ncrop: True
+
+outputs: ./outputs
+
+resume_path:
+seed: 0
+
+
+name:
+
