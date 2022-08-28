@@ -56,7 +56,6 @@ def main():
                                                             augment=True)
 
     model,net_path = get_model(arch=config['arch'])
-    net_path="utils/models/cbam.py"
     if cm:
         task.upload_artifact(name="net path",artifact_object=net_path)  # 记录定义net的py文件
     model = model.to(device)
@@ -86,8 +85,8 @@ def main():
         elif config['scheduler'] == 'reduce':
             scheduler.step(val_acc)
         if cm:
-            logger.report_scalar(title='Loss', series='Train', value=train_loss.item(), iteration=epoch)
-            logger.report_scalar(title='Loss', series='Valid', value=val_loss.item(), iteration=epoch)
+            logger.report_scalar(title='Loss', series='Train', value=train_loss, iteration=epoch)
+            logger.report_scalar(title='Loss', series='Valid', value=val_loss, iteration=epoch)
             logger.report_scalar(title='Accuracy', series='Train', value=train_acc, iteration=epoch)
             logger.report_scalar(title='Accuracy', series='Valid', value=val_acc, iteration=epoch)
 

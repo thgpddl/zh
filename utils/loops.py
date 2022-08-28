@@ -71,8 +71,8 @@ def train(model, train_loader, loss_fn, optimizer, device, scaler, config):
         train_loss.update(loss,n=outputs.shape[0])
         acc1,acc5=accuracy(outputs,labels,topk=(1,5))
         train_acc.update(acc1,n=outputs.shape[0])
-
-    return train_loss.avg,train_acc.avg
+    # 在GPU上累计完后，再item，减少GPU与CPU的转移耗时
+    return train_loss.avg.item(),train_acc.avg.item()
 
 
 def evaluate(model, val_loader, device, config):
@@ -104,7 +104,7 @@ def evaluate(model, val_loader, device, config):
             acc1, acc5 = accuracy(outputs, labels, topk=(1, 5))
             eval_acc.update(acc1, n=outputs.shape[0])
 
-        return eval_loss.avg,eval_acc.avg
+        return eval_loss.avg.item(),eval_acc.avg.item()
 
 
 def test(net, dataloader, Ncrop, device):
