@@ -21,8 +21,8 @@ from utils.getmodel import get_model
 warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser(description='EFR Project')
-parser.add_argument('--name', type=str)
-parser.add_argument('--arch', type=str)
+parser.add_argument('--name', type=str, required=True)
+parser.add_argument('--arch', type=str, required=True)
 parser.add_argument('--epochs', default=300, type=int)
 
 # clearml
@@ -33,6 +33,7 @@ def main():
     config = load_yaml("utils/config.yaml", parser.parse_args())
     if cm:
         task = Task.init(project_name="HP-Fer2013-zh", task_name=config["arch"])  # 负责记录输入输出
+        task.connect(config)
         logger = Logger.current_logger()  # 显式报告 包括标量图、线图、直方图、混淆矩阵、2D 和 3D 散点图、文本日志记录、表格以及图像上传和报告
 
     # 定义本次输出的根目录和checkpoint目录
@@ -86,18 +87,17 @@ def main():
             scheduler.step(val_acc)
         if cm:
             logger.report_scalar(title='Loss', series='Train', value=train_loss, iteration=epoch)
-            logger.report_scalar(title='Loss', series='Valid', value=val_loss, iteration=epoch)
+            logger.report_scalar(title='Loss', series='Val', value=val_loss, iteration=epoch)
             logger.report_scalar(title='Accuracy', series='Train', value=train_acc, iteration=epoch)
-            logger.report_scalar(title='Accuracy', series='Valid', value=val_acc, iteration=epoch)
+            logger.report_scalar(title='Accuracy', series='Val', value=val_acc, iteration=epoch)
 
         # 当前最好
         note = ""
         if val_acc > best_acc:
             best_acc = max(val_acc, best_acc)
             if cm:
-                logger.report_scalar(title='Best Accuracy', value=best_acc, iteration=epoch)
-            best_checkpoint_filename = os.path.join(checkpoint_path,
-                                                    "e" + str(epoch) + "_" + str(best_acc) + '_best_checkpoint.tar')
+                logger.report_scalar(title='Best Accuracy', series="Val", value=best_acc, iteration=epoch)
+            best_checkpoint_filename = os.path.join(checkpoint_path,'best_checkpoint.tar')
             state_dict = {'epoch': epoch,
                           'model_state_dict': model.state_dict(),
                           'opt_state_dict': optimizer.state_dict()}

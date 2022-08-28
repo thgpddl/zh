@@ -137,15 +137,8 @@ def load_yaml(path, args):
         y = yaml.load(f, Loader=yaml.FullLoader)
 
     # 每次都需要一个版本名字
-    if args.name:
-        y['name'] = args.name
-    else:
-        assert False, print("error: the following arguments are required: --name")
-
-    if args.arch:
-        y['arch'] = args.arch
-    else:
-        assert False, print("error: the following arguments are required: --arch")
+    y['name'] = args.name
+    y['arch'] = args.arch
 
     y['epochs'] = args.epochs
 
