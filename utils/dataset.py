@@ -119,9 +119,9 @@ def get_dataloaders(path=r'D:\WorkSpace\zh(v0)\dataset\fer2013.csv', bs=64,num_w
     val = CustomDataset(xval, yval, test_transform)
     test = CustomDataset(xtest, ytest, test_transform)
 
-    trainloader = DataLoader(train, batch_size=bs, shuffle=True, num_workers=num_workers)
-    valloader = DataLoader(val, batch_size=64, shuffle=True, num_workers=num_workers)
-    testloader = DataLoader(test, batch_size=64, shuffle=True, num_workers=num_workers)
+    trainloader = DataLoader(train, batch_size=bs, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=64,persistent_workers=True)
+    valloader = DataLoader(val, batch_size=64, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=32,persistent_workers=True)
+    testloader = DataLoader(test, batch_size=64, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=32,persistent_workers=True)
 
     return trainloader, valloader, testloader
 

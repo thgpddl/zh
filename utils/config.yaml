@@ -1,8 +1,8 @@
 arch:
 epochs:
 
-batch_size: 2
-num_workers: 0
+batch_size: 128
+num_workers: 2
 data_path: dataset/fer2013.csv
 
 lr: 0.1

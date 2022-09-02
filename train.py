@@ -4,7 +4,6 @@ import warnings
 import datetime
 from torch.cuda.amp import GradScaler
 
-from clearml import Task, Logger
 
 import os
 import torch
@@ -27,6 +26,9 @@ parser.add_argument('--epochs', default=300, type=int)
 
 # clearml
 cm= False
+if cm:
+    from clearml import Task, Logger
+
 
 def main():
     # 获取配置信息
