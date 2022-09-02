@@ -78,7 +78,7 @@ def main():
     best_acc = 0
     for epoch in range(1, config['epochs'] + 1):
         start_t = time.time()
-        # train_loss, train_acc = train(model, train_loader, loss_fn, optimizer, device, scaler, config)
+        train_loss, train_acc = train(model, train_loader, loss_fn, optimizer, device, scaler, config)
         val_loss, val_acc = evaluate(model, val_loader, device, config)
 
         if config['scheduler'] == 'cos':

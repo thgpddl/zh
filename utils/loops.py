@@ -17,16 +17,22 @@ from sklearn.metrics import precision_score, f1_score, recall_score, confusion_m
 from utils.utils import (mixup_criterion, mixup_data, smooth_one_hot, accuracy)
 from utils.averagemeter import AverageMeter
 
+import time
+
 
 def train(model, train_loader, loss_fn, optimizer, device, scaler, config):
     model.train()
 
     train_loss=AverageMeter()
     train_acc=AverageMeter()
+    DataRead_Time = AverageMeter()
+    Epoch_Time = AverageMeter()
 
+    t1 = time.time()
     for i, data in enumerate(train_loader):
         images, labels = data
         images, labels = images.to(device), labels.to(device)
+        t2 = time.time()
 
         with autocast():
             if config['Ncrop']:
@@ -75,6 +81,12 @@ def train(model, train_loader, loss_fn, optimizer, device, scaler, config):
         train_loss.update(loss,n=outputs.shape[0])
         acc1,acc5=accuracy(outputs,labels,topk=(1,5))
         train_acc.update(acc1,n=outputs.shape[0])
+
+        t3 = time.time()
+        DataRead_Time.update(t2 - t1)
+        Epoch_Time.update(t3 - t1)
+        t1 = time.time()
+    print("DataRead Time:{}\tTrainEpoch Time:{}".format(DataRead_Time.sum, Epoch_Time.sum))
     # 在GPU上累计完后，再item，减少GPU与CPU的转移耗时
     return train_loss.avg.item(),train_acc.avg.item()
 
