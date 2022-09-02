@@ -31,9 +31,8 @@ def smooth_one_hot(true_labels: torch.Tensor, classes: int, smoothing=0.0):
             size=label_shape, device=true_labels.device)
         true_dist.fill_(smoothing / (classes - 1))
         _, index = torch.max(true_labels, 1)
-
-        true_dist.scatter_(1, torch.LongTensor(
-            index.unsqueeze(1)), confidence)
+        # input.scatter_(dim, index, src)：将src中数据根据index中的索引按照dim的方向填进input
+        true_dist.scatter_(1, torch.LongTensor(index.unsqueeze(1)), confidence)
     return true_dist.to(device)
 
 

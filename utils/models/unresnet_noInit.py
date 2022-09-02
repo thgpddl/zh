@@ -96,3 +96,23 @@ if __name__ == "__main__":
     model = unresnet_noInit().cuda()
     summary(model, input_size=(1, 40, 40))
     print(1)
+
+    # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+    # Total
+    # params: 11, 171, 271
+    # Trainable
+    # params: 11, 171, 271
+    # Non - trainable
+    # params: 0
+    # ----------------------------------------------------------------
+    # Input
+    # size(MB): 0.01
+    # Forward / backward
+    # pass
+    # size(MB): 17.58
+    # Params
+    # size(MB): 42.62
+    # Estimated
+    # Total
+    # Size(MB): 60.20
+    # ----------------------------------------------------------------

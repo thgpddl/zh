@@ -32,11 +32,15 @@ def train(model, train_loader, loss_fn, optimizer, device, scaler, config):
             if config['Ncrop']:
                 bs, ncrops, c, h, w = images.shape
                 images = images.view(-1, c, h, w)
+                # tensor([2, 2, 0, 4, 3, 6, 6, 6, 2, 5, 6, 4, 6, 0, 4, 0], device='cuda:0')
+                # tensor([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 3, 3, 3, 3,
                 labels = torch.repeat_interleave(labels, repeats=ncrops, dim=0)
 
             if config['mixup']:
+                # labels=(80,)
                 images, labels_a, labels_b, lam = mixup_data(
                     images, labels, config['mixup_alpha'])
+                # labels_a=labels_b=(80,)
                 images, labels_a, labels_b = map(Variable, (images, labels_a, labels_b))
 
             outputs = model(images)
