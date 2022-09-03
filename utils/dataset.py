@@ -67,7 +67,11 @@ def prepare_data(data):
     return image_array, image_label
 
 
-def get_dataloaders(path=r'D:\WorkSpace\zh(v0)\dataset\fer2013.csv', bs=64,num_workers=0, augment=True):
+def worker_init_fn(worker_id):
+    np.random.seed(int(worker_id))
+
+
+def get_dataloaders(path=r'D:\WorkSpace\zh(v0)\dataset\fer2013.csv', bs=64, num_workers=0, augment=True):
     """ Prepare train, val, & test dataloaders
         Augment training data using:
             - cropping
@@ -114,19 +118,21 @@ def get_dataloaders(path=r'D:\WorkSpace\zh(v0)\dataset\fer2013.csv', bs=64,num_w
     else:
         train_transform = test_transform
 
-
     train = CustomDataset(xtrain, ytrain, train_transform)
     val = CustomDataset(xval, yval, test_transform)
     test = CustomDataset(xtest, ytest, test_transform)
 
-    trainloader = DataLoader(train, batch_size=bs, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=64,persistent_workers=True)
-    valloader = DataLoader(val, batch_size=64, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=32,persistent_workers=True)
-    testloader = DataLoader(test, batch_size=64, shuffle=True, num_workers=num_workers,pin_memory=True,prefetch_factor=32,persistent_workers=True)
+    trainloader = DataLoader(train, batch_size=bs, shuffle=True, num_workers=num_workers, pin_memory=True,
+                             prefetch_factor=64, persistent_workers=True, worker_init_fn=worker_init_fn)
+    valloader = DataLoader(val, batch_size=64, shuffle=True, num_workers=num_workers, pin_memory=True,
+                           prefetch_factor=32, persistent_workers=True)
+    testloader = DataLoader(test, batch_size=64, shuffle=True, num_workers=num_workers, pin_memory=True,
+                            prefetch_factor=32, persistent_workers=True)
 
     return trainloader, valloader, testloader
 
-if __name__=="__main__":
-    trainloader, valloader, testloader=get_dataloaders()
+
+if __name__ == "__main__":
+    trainloader, valloader, testloader = get_dataloaders()
     for data in trainloader:
         pass
-
