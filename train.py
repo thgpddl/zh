@@ -34,7 +34,7 @@ def main():
     # 获取配置信息
     config = load_yaml("utils/config.yaml", parser.parse_args())
     if cm:
-        task = Task.init(project_name="HP-Fer2013-zh", task_name=config["arch"])  # 负责记录输入输出
+        task = Task.init(project_name="HP-Fer2013-zh", task_name=config["name"])  # 负责记录输入输出
         task.connect(config)
         logger = Logger.current_logger()  # 显式报告 包括标量图、线图、直方图、混淆矩阵、2D 和 3D 散点图、文本日志记录、表格以及图像上传和报告
 
